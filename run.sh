@@ -1,0 +1,1 @@
+gcc video-store.c && ./a.out
