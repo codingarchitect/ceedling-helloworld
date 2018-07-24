@@ -36,9 +36,32 @@ struct Customer* getCustomerData()
     return customer;
 }
 
-void freeRentals(struct Customer *customer) 
+void freeCustomer(struct Customer *customer) 
 {
+    int i;
+    int noOfRentals = sizeof(customer->rentals) / sizeof(customer->rentals[0]);
+    for (i = 0; i < noOfRentals; i++) 
+    {
+        struct Rental *rental = customer->rentals[i];
+        free(rental);
+    }
+    free(customer);
+}
 
+void freeMovies(GHashTable *movies) 
+{
+    int i = 0;
+    int noOfMovies = g_hash_table_size(movies);
+    GHashTableIter moviesIterator;
+    g_hash_table_iter_init (&moviesIterator, movies);
+    gpointer movieKey, movieValue;
+    
+    while(g_hash_table_iter_next (&moviesIterator, &movieKey, &movieValue))
+    {
+        struct Movie *movie = (struct Movie*)movieValue;
+        free(movie);
+    }
+    g_hash_table_destroy(movies);
 }
 
 GHashTable* getMoviesData()
@@ -71,7 +94,7 @@ GHashTable* getMoviesData()
 
 int main(void) 
 {
-    struct Customer customer1 = *getCustomerData();
+    struct Customer *customer1 = getCustomerData();
     GHashTable* movies = getMoviesData();
     int i = 0;
     
@@ -87,11 +110,11 @@ int main(void)
         printf("MovieID: %s, Title: %s, Code: %s\n", movie->movieID, movie->title, movie->code);        
     }
 
-    printf("Rentals for Customer: %s\n", customer1.name);
-    int noOfRentals = sizeof(customer1.rentals) / sizeof(customer1.rentals[0]);
+    printf("Rentals for Customer: %s\n", customer1->name);
+    int noOfRentals = sizeof(customer1->rentals) / sizeof(customer1->rentals[0]);
     for(i = 0; i < noOfRentals; i++)
     {
-        struct Rental *rental = customer1.rentals[i];
+        struct Rental *rental = customer1->rentals[i];
         printf("Movie: %s, Days rented: %d\n", rental->movieID, rental->days);
     }
 
@@ -99,10 +122,10 @@ int main(void)
     int frequentRenterPoints = 0;
     double thisAmount = 0;
     char result[4096];
-    sprintf(result, "Rental Record for %s\n", customer1.name);
-    noOfRentals = sizeof(customer1.rentals) / sizeof(customer1.rentals[0]);
+    sprintf(result, "Rental Record for %s\n", customer1->name);
+    noOfRentals = sizeof(customer1->rentals) / sizeof(customer1->rentals[0]);
     for (i = 0; i < noOfRentals; i++) {
-        struct Rental *rental = customer1.rentals[i];
+        struct Rental *rental = customer1->rentals[i];
         struct Movie *movie = g_hash_table_lookup(movies, rental->movieID);
         printf("MovieID: %s, Title: %s, Code: %s\n", movie->movieID, movie->title, movie->code);
         // determine amount for each movie
@@ -145,4 +168,6 @@ int main(void)
     sprintf(frequentRenterPointsBuffer, "You earned %d frequent renter points\n", frequentRenterPoints);
     strcat(result, frequentRenterPointsBuffer);
     puts(result);
+    freeCustomer(customer1);
+    freeMovies(movies);
 }
