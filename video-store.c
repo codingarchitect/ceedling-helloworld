@@ -107,6 +107,19 @@ void printMoviesInStore(struct Movie *movies)
     }
 }
 
+void printCustomerInfo(struct Customer *customer)
+{
+    int i = 0;
+    printf("Rentals for Customer: %s\n", customer->name);
+    int noOfRentals = sizeof(customer->rentals) / sizeof(customer->rentals[0]);
+    for(i = 0; i < noOfRentals; i++)
+    {
+        struct Rental *rental = customer->rentals[i];
+        printf("Movie: %s, Days rented: %d\n", rental->movieID, rental->days);
+    }
+
+}
+
 int main(void) 
 {
     struct Customer *customer1 = getCustomerData();
@@ -114,21 +127,14 @@ int main(void)
     int i = 0;
     
     printMoviesInStore(movies);
-
-    printf("Rentals for Customer: %s\n", customer1->name);
-    int noOfRentals = sizeof(customer1->rentals) / sizeof(customer1->rentals[0]);
-    for(i = 0; i < noOfRentals; i++)
-    {
-        struct Rental *rental = customer1->rentals[i];
-        printf("Movie: %s, Days rented: %d\n", rental->movieID, rental->days);
-    }
-
+    printCustomerInfo(customer1);
+    
     double totalAmount = 0;
     int frequentRenterPoints = 0;
     double thisAmount = 0;
     char result[4096];
     sprintf(result, "Rental Record for %s\n", customer1->name);
-    noOfRentals = sizeof(customer1->rentals) / sizeof(customer1->rentals[0]);
+    int noOfRentals = sizeof(customer1->rentals) / sizeof(customer1->rentals[0]);
     for (i = 0; i < noOfRentals; i++) {
         struct Rental *rental = customer1->rentals[i];
         struct Movie *movie = g_hash_table_lookup(movies, rental->movieID);
