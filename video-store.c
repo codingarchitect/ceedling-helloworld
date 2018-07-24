@@ -117,19 +117,13 @@ void printCustomerInfo(struct Customer *customer)
 
 }
 
-int main(void) 
+char* getStatement(GHashTable *movies, struct Customer *customer)
 {
-    struct Customer *customer = getCustomerData();
-    GHashTable* movies = getMoviesData();
-    printMoviesInStore(movies);
-    printCustomerInfo(customer);
-    
-    int i = 0;
-    
+    int i = 0;    
     double totalAmount = 0;
     int frequentRenterPoints = 0;
     double thisAmount = 0;
-    char result[4096];
+    char * result = (char*)malloc(4096);
     sprintf(result, "Rental Record for %s\n", customer->name);
     int noOfRentals = sizeof(customer->rentals) / sizeof(customer->rentals[0]);
     for (i = 0; i < noOfRentals; i++) {
@@ -175,7 +169,19 @@ int main(void)
     char frequentRenterPointsBuffer[500];
     sprintf(frequentRenterPointsBuffer, "You earned %d frequent renter points\n", frequentRenterPoints);
     strcat(result, frequentRenterPointsBuffer);
-    puts(result);
+    return result;
+}
+
+int main(void) 
+{
+    struct Customer *customer = getCustomerData();
+    GHashTable* movies = getMoviesData();
+    printMoviesInStore(movies);
+    printCustomerInfo(customer);
+    char * statement = getStatement(movies, customer);
+    
+    puts(statement);
     freeCustomer(customer);
     freeMovies(movies);
+    free(statement);
 }
