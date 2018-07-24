@@ -20,18 +20,25 @@ struct Movie
     char code[20];
 };
 
-struct Customer getCustomerData() 
+struct Customer* getCustomerData() 
 {
     struct Rental *rental1, *rental2;
+    struct Customer* customer;
 
     rental1 = (struct Rental *) malloc(sizeof(struct Rental));
     rental2 = (struct Rental *) malloc(sizeof(struct Rental));
+    customer = (struct Customer *) malloc(sizeof(struct Customer));
 
     *rental1 = (struct Rental){ .movieID = "M00001", .days = 1 };
     *rental2 = (struct Rental){ .movieID = "M00002", .days = 2 };
-    
-    struct Customer customer = { .name = "Sendhil Kumar R", .rentals = { rental1, rental2 } };
+
+    *customer = (struct Customer){ .name = "Sendhil Kumar R", .rentals = { rental1, rental2 } };
     return customer;
+}
+
+void freeRentals(struct Customer *customer) 
+{
+
 }
 
 GHashTable* getMoviesData()
@@ -64,7 +71,7 @@ GHashTable* getMoviesData()
 
 int main(void) 
 {
-    struct Customer customer1 = getCustomerData();
+    struct Customer customer1 = *getCustomerData();
     GHashTable* movies = getMoviesData();
     int i = 0;
     
