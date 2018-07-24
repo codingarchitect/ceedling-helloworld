@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <glib.h>
 
 int main(void) 
 {
@@ -30,15 +31,26 @@ int main(void)
     struct Movie movie4 = { .movieID = "M00004", .title = "The Lord of the rings - The Two Towers", .code = "REGULAR" };
     struct Movie movie5 = { .movieID = "M00005", .title = "Kungfu Panda", .code = "CHILDRENS" };
     struct Movie movie6 = { .movieID = "M00006", .title = "Annabelle Creation", .code = "NEW" };
-    struct Movie *movies[6] = { &movie1, &movie2, &movie3, &movie4, &movie5, &movie6 };
+    // struct Movie *movies[6] = { &movie1, &movie2, &movie3, &movie4, &movie5, &movie6 };
+    GHashTable* movies = g_hash_table_new(g_str_hash, g_str_equal);
+    g_hash_table_insert(movies, movie1.movieID, &movie1);
+    g_hash_table_insert(movies, movie2.movieID, &movie2);
+    g_hash_table_insert(movies, movie3.movieID, &movie3);
+    g_hash_table_insert(movies, movie4.movieID, &movie4);
+    g_hash_table_insert(movies, movie5.movieID, &movie5);
+    g_hash_table_insert(movies, movie6.movieID, &movie6);
     int i = 0;
     
     printf("Movies in the store: \n");
-    int noOfMovies = sizeof(movies) / sizeof(movies[0]);
-    for(i = 0; i < noOfMovies; i++)
+    int noOfMovies = g_hash_table_size(movies);
+    GHashTableIter moviesIterator;
+    g_hash_table_iter_init (&moviesIterator, movies);
+    gpointer movieKey, movieValue;
+    
+    while(g_hash_table_iter_next (&moviesIterator, &movieKey, &movieValue))
     {
-        struct Movie *movie = movies[i];
-        printf("MovieID: %s, Title: %s, Code: %s\n", movie->movieID, movie->title, movie->code);
+        struct Movie *movie = (struct Movie*)movieValue;
+        printf("MovieID: %s, Title: %s, Code: %s\n", movie->movieID, movie->title, movie->code);        
     }
 
     printf("Rentals for Customer: %s\n", customer1.name);
