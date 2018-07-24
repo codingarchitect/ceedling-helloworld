@@ -1,1 +1,1 @@
-gcc `pkg-config --cflags glib-2.0` video-store.c `pkg-config --libs glib-2.0` && ./a.out
+gcc -Wall `pkg-config --cflags glib-2.0` video-store.c `pkg-config --libs glib-2.0` && ./a.out

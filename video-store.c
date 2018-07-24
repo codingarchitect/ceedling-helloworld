@@ -1,44 +1,71 @@
 #include <stdio.h>
 #include <glib.h>
 
-int main(void) 
+struct Rental 
 {
-    struct Rental 
-    {
-        char movieID[7];
-        int days;
-    };
+    char movieID[7];
+    int days;
+};
 
-    struct Customer
-    {
-        char name[100];
-        struct Rental *rentals[2];
-    };
+struct Customer
+{
+    char name[100];
+    struct Rental *rentals[2];
+};
 
-    struct Movie
-    {
-        char movieID[7];
-        char title[100];
-        char code[20];
-    };
+struct Movie
+{
+    char movieID[7];
+    char title[100];
+    char code[20];
+};
 
-    struct Rental rental1 = { .movieID = "M00001", .days = 1 };
-    struct Rental rental2 = { .movieID = "M00002", .days = 2 };
-    struct Customer customer1 = { .name = "Sendhil Kumar R", .rentals = { &rental1, &rental2 } };
-    struct Movie movie1 = { .movieID = "M00001", .title = "Godfather", .code = "REGULAR" };
-    struct Movie movie2 = { .movieID = "M00002", .title = "The Lord of the rings - The Fellowship of the ring", .code = "REGULAR" };
-    struct Movie movie3 = { .movieID = "M00003", .title = "The Lord of the rings - The Return of the ring", .code = "REGULAR" };
-    struct Movie movie4 = { .movieID = "M00004", .title = "The Lord of the rings - The Two Towers", .code = "REGULAR" };
-    struct Movie movie5 = { .movieID = "M00005", .title = "Kungfu Panda", .code = "CHILDRENS" };
-    struct Movie movie6 = { .movieID = "M00006", .title = "Annabelle Creation", .code = "NEW" };
+struct Customer getCustomerData() 
+{
+    struct Rental *rental1, *rental2;
+
+    rental1 = (struct Rental *) malloc(sizeof(struct Rental));
+    rental2 = (struct Rental *) malloc(sizeof(struct Rental));
+
+    *rental1 = (struct Rental){ .movieID = "M00001", .days = 1 };
+    *rental2 = (struct Rental){ .movieID = "M00002", .days = 2 };
+    
+    struct Customer customer = { .name = "Sendhil Kumar R", .rentals = { rental1, rental2 } };
+    return customer;
+}
+
+GHashTable* getMoviesData()
+{
+    struct Movie *movie1, *movie2, *movie3, *movie4, *movie5, *movie6;
+
+    movie1 = (struct Movie *) malloc(sizeof(struct Movie));
+    movie2 = (struct Movie *) malloc(sizeof(struct Movie));
+    movie3 = (struct Movie *) malloc(sizeof(struct Movie));
+    movie4 = (struct Movie *) malloc(sizeof(struct Movie));
+    movie5 = (struct Movie *) malloc(sizeof(struct Movie));
+    movie6 = (struct Movie *) malloc(sizeof(struct Movie));
+
+    *movie1 = (struct Movie){ .movieID = "M00001", .title = "Godfather", .code = "REGULAR" };
+    *movie2 = (struct Movie){ .movieID = "M00002", .title = "The Lord of the rings - The Fellowship of the ring", .code = "REGULAR" };
+    *movie3 = (struct Movie){ .movieID = "M00003", .title = "The Lord of the rings - The Return of the ring", .code = "REGULAR" };
+    *movie4 = (struct Movie){ .movieID = "M00004", .title = "The Lord of the rings - The Two Towers", .code = "REGULAR" };
+    *movie5 = (struct Movie){ .movieID = "M00005", .title = "Kungfu Panda", .code = "CHILDRENS" };
+    *movie6 = (struct Movie){ .movieID = "M00006", .title = "Annabelle Creation", .code = "NEW" };
     // struct Movie *movies[6] = { &movie1, &movie2, &movie3, &movie4, &movie5, &movie6 };
     GHashTable* movies = g_hash_table_new(g_str_hash, g_str_equal);
-    g_hash_table_insert(movies, movie1.movieID, &movie1);
-    g_hash_table_insert(movies, movie2.movieID, &movie2);
-    g_hash_table_insert(movies, movie3.movieID, &movie3);
-    g_hash_table_insert(movies, movie4.movieID, &movie4);
-    g_hash_table_insert(movies, movie5.movieID, &movie5);
-    g_hash_table_insert(movies, movie6.movieID, &movie6);
+    g_hash_table_insert(movies, movie1->movieID, movie1);
+    g_hash_table_insert(movies, movie2->movieID, movie2);
+    g_hash_table_insert(movies, movie3->movieID, movie3);
+    g_hash_table_insert(movies, movie4->movieID, movie4);
+    g_hash_table_insert(movies, movie5->movieID, movie5);
+    g_hash_table_insert(movies, movie6->movieID, movie6);
+    return movies;
+} 
+
+int main(void) 
+{
+    struct Customer customer1 = getCustomerData();
+    GHashTable* movies = getMoviesData();
     int i = 0;
     
     printf("Movies in the store: \n");
