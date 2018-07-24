@@ -172,6 +172,13 @@ char* getStatement(GHashTable *movies, struct Customer *customer)
     return result;
 }
 
+void cleanup(GHashTable *movies, struct Customer *customer, char *statement)
+{
+    freeCustomer(customer);
+    freeMovies(movies);
+    free(statement);
+}
+
 int main(void) 
 {
     struct Customer *customer = getCustomerData();
@@ -179,9 +186,7 @@ int main(void)
     printMoviesInStore(movies);
     printCustomerInfo(customer);
     char * statement = getStatement(movies, customer);
-    
+    cleanup(movies, customer, statement);
     puts(statement);
-    freeCustomer(customer);
-    freeMovies(movies);
-    free(statement);
+    
 }
