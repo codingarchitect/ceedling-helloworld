@@ -92,12 +92,8 @@ GHashTable* getMoviesData()
     return movies;
 } 
 
-int main(void) 
+void printMoviesInStore(struct Movie *movies)
 {
-    struct Customer *customer1 = getCustomerData();
-    GHashTable* movies = getMoviesData();
-    int i = 0;
-    
     printf("Movies in the store: \n");
     int noOfMovies = g_hash_table_size(movies);
     GHashTableIter moviesIterator;
@@ -109,6 +105,15 @@ int main(void)
         struct Movie *movie = (struct Movie*)movieValue;
         printf("MovieID: %s, Title: %s, Code: %s\n", movie->movieID, movie->title, movie->code);        
     }
+}
+
+int main(void) 
+{
+    struct Customer *customer1 = getCustomerData();
+    GHashTable* movies = getMoviesData();
+    int i = 0;
+    
+    printMoviesInStore(movies);
 
     printf("Rentals for Customer: %s\n", customer1->name);
     int noOfRentals = sizeof(customer1->rentals) / sizeof(customer1->rentals[0]);
