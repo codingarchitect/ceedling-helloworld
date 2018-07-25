@@ -1,24 +1,6 @@
 #include <stdio.h>
 #include <glib.h>
-
-struct Rental 
-{
-    char movieID[7];
-    int days;
-};
-
-struct Customer
-{
-    char name[100];
-    struct Rental *rentals[2];
-};
-
-struct Movie
-{
-    char movieID[7];
-    char title[100];
-    char code[20];
-};
+#include "video-store-data-types.h"
 
 struct Customer* getCustomerData() 
 {
@@ -129,7 +111,6 @@ char* getStatement(GHashTable *movies, struct Customer *customer)
     for (i = 0; i < noOfRentals; i++) {
         struct Rental *rental = customer->rentals[i];
         struct Movie *movie = g_hash_table_lookup(movies, rental->movieID);
-        printf("MovieID: %s, Title: %s, Code: %s\n", movie->movieID, movie->title, movie->code);
         // determine amount for each movie
         if (strcmp(movie->code, "REGULAR") == 0)
         {
@@ -187,6 +168,5 @@ int main(void)
     printCustomerInfo(customer);
     char * statement = getStatement(movies, customer);
     cleanup(movies, customer, statement);
-    puts(statement);
-    
+    puts(statement);    
 }
