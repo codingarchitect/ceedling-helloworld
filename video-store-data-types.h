@@ -1,3 +1,6 @@
+#ifndef VIDEO_STORE_DATA_TYPES_H
+#define VIDEO_STORE_DATA_TYPES_H
+
 struct Rental 
 {
     char movieID[7];
@@ -16,3 +19,4 @@ struct Movie
     char title[100];
     char code[20];
 };
+#endif // VIDEO_STORE_DATA_TYPES_H
