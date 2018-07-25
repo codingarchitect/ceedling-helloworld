@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <glib.h>
-#include "video-store-data-types.h"
-#include "video-store-data-provider.h"
-#include "video-store-data-display.h"
-#include "video-store.h"
+#include "video_store_data_types.h"
+#include "video_store_data_provider.h"
+#include "video_store_data_display.h"
+#include "video_store.h"
 
 void cleanup(GHashTable *movies, struct Customer *customer, char *statement)
 {
