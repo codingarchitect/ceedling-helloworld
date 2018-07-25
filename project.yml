@@ -102,6 +102,18 @@
     - "-w"
     - '"${1}"'  
     - -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
+  :test_linker:
+    :executable: gcc
+    :name: default_test_linker
+    :stderr_redirect: :none
+    :background_exec: :none
+    :optional: false
+    :arguments:
+    - '"${1}"'
+    - -o "${2}"
+    - ''
+    - "${4}"
+    - -lglib-2.0
     
 # LIBRARIES
 # These libraries are automatically injected into the build process. Those specified as
@@ -109,21 +121,30 @@
 # tests or releases. These options are MERGED with the options in supplemental yaml files.
 :libraries:
   :placement: :end
+  #:flag: "l${1}"  # or "-L ${1}" for example
   :flag: "${1}"  # or "-L ${1}" for example
   :common: &common_libraries []
+  #:common: &common_libraries [glib-2.0]
   :test:
     - *common_libraries
   :release:
     - *common_libraries
 
 :flags:
+  :release:
+    :compile:
+      :*:       # add '--O1' to compilation of main.c as part of test builds including main.c
+        - -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
+    # :link:
+    #   :*:  # add '--bar --baz' to linking of test_main.exe
+    #     - -lglib-2.0
   :test:
     :compile:
       :*:       # add '--O1' to compilation of main.c as part of test builds including main.c
         - -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
-    :link:
-      :*:  # add '--bar --baz' to linking of test_main.exe
-        - -lglib-2.0
+    # :link:
+    #   :*:  # add '--bar --baz' to linking of test_main.exe
+    #     - -lglib-2.0
         
 :plugins:
   :load_paths:
